@@ -4,4 +4,4 @@ A fun* platformer made as an A2 Computer Science project.
 
 
 
-* fun not guaranteed
+<sub><sup>\* Fun not guaranteed<sup><sub>
