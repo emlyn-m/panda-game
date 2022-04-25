@@ -25,6 +25,12 @@ class Vector2():
         self.__magnitude = self.__calculateMagnitude()
         self.__angle = self.__calculateAngle()
 
+    def fromPolar(polarValues):
+        x = polarValues[0] * math.cos(polarValues[1])
+        y = polarValues[0] * math.sin(polarValues[1])
+        return Vector2([x, y])
+
+
     def __calculateMagnitude(self):
         return sum([x**2 for x in self.__values]) ** .5
 
@@ -37,7 +43,7 @@ class Vector2():
 
         :type other: Vector2
         :rtype: Vector2
-        :raises ValueError: If other is not a Vector2
+        :raises TypeError: If other is not a Vector2
         """
         if (type(other) == type(self)):
             return Vector2(
@@ -52,16 +58,20 @@ class Vector2():
         :rtype: Vector2
         :raises ValueError: If other is not a Vector2
         """
-        self.__add__(self.__mul__(-1))
+        return self.__add__(self.__mul__(-1))
 
     def __mul__(self, other):
         """
-        Multiply by scalar.
+        Multiply.
 
-        :type other: Scalar
+        :type other: Scalar OR Vector2
         :rtype: Vector2
-        :raises ValueError: If other is not a scalar
+        :raises TypeError: If other is not a scalar OR Vector2
         """
+
+        if type(self) == type(other):  # Dot product
+            return sum([x*y for x, y in zip(list(self), list(other))])
+
         try:
             int(other)  # Check numeric
             return Vector2([x * other for x in self.__values])
@@ -89,6 +99,12 @@ class Vector2():
         """Represent as List."""
         return self.__values
 
+    def __getitem__(self, idx):
+        return self.__values[idx]
+
+    def __setitem__(self, idx, val):
+        self.__values[idx] = val
+
     # Accessors
     def getValues(self):
         """Get current values."""
@@ -103,3 +119,6 @@ class Vector2():
     def getPolar(self):
         """Get vector in polar form."""
         return (self.__magnitude, self.__angle)
+
+    def getNormalized(self):
+        return self * (1/self.getPolar()[0])
