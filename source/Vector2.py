@@ -58,7 +58,7 @@ class Vector2():
         :rtype: Vector2
         :raises ValueError: If other is not a Vector2
         """
-        return self.__add__(self.__mul__(-1))
+        return self.__add__(other.__mul__(-1))
 
     def __mul__(self, other):
         """

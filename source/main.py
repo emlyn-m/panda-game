@@ -9,7 +9,8 @@ import pygame
 from Vector2 import Vector2
 from Player import Player
 from GraphicsManager import GraphicsManager
-from PhysicsManager import PhysicsManager
+from MovablePhysicsManager import MovablePhysicsManager
+from CollidablePhysicsManager import CollidablePhysicsManager
 from EnvObject import EnvironmentalObject
 
 
@@ -28,13 +29,9 @@ def __main__():
     screen = pygame.display.set_mode(flags=pygame.FULLSCREEN)
 
     # Initialize player
-    playerGraphicsManager = GraphicsManager("../assets/panda.idle/", 3.5, (100, 100))
-    playerPhysicsManager = PhysicsManager(100, (100, 175), .3, Vector2([0, 680]), pygame.mask.from_surface(playerGraphicsManager.idleFrames[0]))
-    mPlayer = Player(playerGraphicsManager, playerPhysicsManager)
+    mPlayer = Player("../assets/panda.idle/", 3.5, (100, 100), 100, .7, Vector2([300, 80]))
+    testObj = EnvironmentalObject("../assets/panda.idle/", 1, (200, 200), Vector2([250, 280]))
 
-    testObjGraphicsManager = GraphicsManager("../assets/panda.idle/", 1, (50, 50))
-    testObjPhysicsManager = PhysicsManager(0, (50, 50), 1, Vector2([200, 200]), pygame.mask.from_surface(testObjGraphicsManager.idleFrames[0]))
-    testObj = EnvironmentalObject(testObjGraphicsManager, testObjPhysicsManager)
 
     while True:
 
@@ -45,28 +42,23 @@ def __main__():
         # Handle inputs
         pressedKeys = pygame.key.get_pressed()
         if pressedKeys[pygame.K_LEFT]:
-            mPlayer.physicsManager.applyForce(Vector2([-1, 0]) * mPlayer.physicsManager.moveForce)
+            mPlayer.walk(Vector2([-1, 0]))
 
         if pressedKeys[pygame.K_RIGHT]:
-            mPlayer.physicsManager.applyForce(Vector2([1, 0]) * mPlayer.physicsManager.moveForce)
+            mPlayer.walk(Vector2([1, 0]))
 
         if pressedKeys[pygame.K_UP] or pressedKeys[pygame.K_c]:
-            if mPlayer.physicsManager.grounded:
-                mPlayer.physicsManager.applyForce(Vector2([0, -1]) * mPlayer.physicsManager.jumpForce)
-                mPlayer.physicsManager.grounded = False
+            mPlayer.jump()
 
         if pressedKeys[pygame.K_x]:
             pass  # Special action
 
-        mPlayer.physicsManager.tick(1/fps, [testObj])  # TODO: Replace [] with env objs
-
         screen.fill((0, 0, 0))
-        mPlayer.graphicsManager.draw(screen, mPlayer.physicsManager.pos.getValues())
+
+        mPlayer.tick(1/fps, [testObj], screen)  # TODO: Replace [] with env objs
 
         for obj in [testObj]:
-            obj.graphicsManager.draw(screen, obj.physicsManager.pos.getValues())
-
-        # TODO: Draw all environmental objects
+            obj.tick(1/fps, screen)
 
         pygame.display.flip()
         fpsClock.tick(fps)  # Cap at 60 FPS

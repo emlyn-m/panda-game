@@ -3,7 +3,6 @@ import os
 
 class GraphicsManager:
     def __init__(self, spritePath, lengthMultiplier, sizeXY):
-        # TODO: Load sprite
         self.sizeXY = sizeXY
         self.spriteFrames = self.loadAnim(spritePath, lengthMultiplier)
 
@@ -16,10 +15,10 @@ class GraphicsManager:
         self.lengthMultiplier = lengthMultiplier
 
         if not os.path.exists(animFramesPath):  # Check path exists
-            return False
+            return None
 
         if len(os.listdir(animFramesPath)) == 0:  # Check frames exist
-            return False
+            return None
 
         frames = []
         for fName in os.listdir(animFramesPath):
@@ -30,7 +29,7 @@ class GraphicsManager:
 
 
 
-    def draw(self, screen, pos):
+    def tick(self, screen, pos):
         screen.blit(self.spriteFrames[int(self.activeFrameIdx)], pos)
         self.activeFrameIdx += 1/self.lengthMultiplier  # TODO: Find some better way to do this avoiding floating point rounding errors
         # ACTUALLY dont fix this JUST yet, it'll be a cool point for second presentation (easily fixable with round(n, 7))
