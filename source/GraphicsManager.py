@@ -4,12 +4,12 @@ import os
 class GraphicsManager:
     def __init__(self, spritePath, lengthMultiplier, sizeXY):
         self.sizeXY = sizeXY
-        self.spriteFrames = self.loadAnim(spritePath, lengthMultiplier)
+        self.spriteFrames = self.__loadAnim(spritePath, lengthMultiplier)
 
         self.idleLengthMultiplier = lengthMultiplier
         self.idleFrames = self.spriteFrames
 
-    def loadAnim(self, animFramesPath, lengthMultiplier):
+    def __loadAnim(self, animFramesPath, lengthMultiplier):
 
         self.activeFrameIdx = 0  # Reset animation
         self.lengthMultiplier = lengthMultiplier

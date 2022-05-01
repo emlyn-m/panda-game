@@ -15,27 +15,7 @@ class MovablePhysicsManager(PhysicsManager):
 
     def applyForce(self, forceVec):
         self.accel += forceVec * (1/self.mass)
-
-    def checkCollision(self, deltaT, objs):
-        self.dT = deltaT
-
-        # Handle collisions
-        collNormals = []
-        for obj in objs:
-            collNormals.append(obj.physicsManager.collide(self))
-
-        groundedCN = Vector2([0, 1])
-        for cn in collNormals:
-            if list(cn) == list(groundedCN):
-
-                if not self.grounded: self.accel[1] = 0  # Only reset fall accel on first ground collision otherwise cannot jump
-
-                self.grounded = True
-                break
-        else:
-            self.grounded = False
-
-
+        
     def move(self, dT):
         if not self.grounded: self.accel[1] += self.mass * constants.GRAVITY
 
