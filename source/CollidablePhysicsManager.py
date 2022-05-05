@@ -22,7 +22,7 @@ class CollidablePhysicsManager(PhysicsManager):
             dV_r = collVec * physicsManager.velVec  # TODO: Fix this to fix stall far away bug
             dV = collVec * dV_r
 
-            if collVec.getPolar()[1] > 0:  # For some reason dV_r has theta ALWAYS > 0
+            if collVec.getPolar()[1] >= 0:  # For some reason dV_r has theta ALWAYS > 0
                 dV *= -1
 
             physicsManager.velVec += dV

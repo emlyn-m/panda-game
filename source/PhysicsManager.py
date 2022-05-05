@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from Vector2 import Vector2
 
 class PhysicsManager(ABC):
 

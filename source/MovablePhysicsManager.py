@@ -15,8 +15,8 @@ class MovablePhysicsManager(PhysicsManager):
 
     def applyForce(self, forceVec):
         self.accel += forceVec * (1/self.mass)
-        
-    def move(self, dT):
+
+    def __move(self, dT):
         if not self.grounded: self.accel[1] += self.mass * constants.GRAVITY
 
 
@@ -28,9 +28,8 @@ class MovablePhysicsManager(PhysicsManager):
 
     def tick(self, deltaT, objects):
 
-        self.move(deltaT)
+        self.__move(deltaT)
 
         self.checkCollision(deltaT, objects)
 
-        # TODO: FRICTION
         self.accel *= self.mu

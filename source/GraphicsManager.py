@@ -1,13 +1,16 @@
 import pygame
 import os
 
+from Stack import Stack
+from Animation import Animation
+
 class GraphicsManager:
     def __init__(self, spritePath, lengthMultiplier, sizeXY):
         self.sizeXY = sizeXY
-        self.spriteFrames = self.__loadAnim(spritePath, lengthMultiplier)
+        self.animStack = Stack(5)  # Unlikely to need more than 5 animations at once
 
-        self.idleLengthMultiplier = lengthMultiplier
-        self.idleFrames = self.spriteFrames
+        self.activeAnim = Animation(spritePath, lengthMultiplier, sizeXY)
+        self.animStack.push(self.activeAnim)
 
     def __loadAnim(self, animFramesPath, lengthMultiplier):
 
@@ -28,13 +31,16 @@ class GraphicsManager:
         return frames
 
 
-
     def tick(self, screen, pos):
-        screen.blit(self.spriteFrames[int(self.activeFrameIdx)], pos)
-        self.activeFrameIdx += 1/self.lengthMultiplier  # TODO: Find some better way to do this avoiding floating point rounding errors
-        # ACTUALLY dont fix this JUST yet, it'll be a cool point for second presentation (easily fixable with round(n, 7))
 
-        if self.activeFrameIdx >= len(self.spriteFrames):
-            self.spriteFrames = self.idleFrames  # Each anim should only play once
-            self.lengthMultiplier = self.idleLengthMultiplier
-            self.activeFrameIdx = 0
+        if (self.activeAnim.killable):
+            newActiveAnim = self.animStack.pop()
+            if newActiveAnim:  # Return None if no animation next
+                self.activeAnim = newActiveAnim
+            else:
+                self.activeAnim.reset()
+
+        newFrame = self.activeAnim.frames.dequeue()
+        screen.blit(newFrame, pos)
+
+        self.activeAnim.tick(1)

@@ -12,6 +12,7 @@ from GraphicsManager import GraphicsManager
 from MovablePhysicsManager import MovablePhysicsManager
 from CollidablePhysicsManager import CollidablePhysicsManager
 from EnvObject import EnvironmentalObject
+from LevelScreen import LevelScreen
 
 
 def safeQuit():
@@ -29,9 +30,10 @@ def __main__():
     screen = pygame.display.set_mode(flags=pygame.FULLSCREEN)
 
     # Initialize player
-    mPlayer = Player("../assets/panda.idle/", 3.5, (100, 100), 100, .7, Vector2([300, 80]))
-    testObj = EnvironmentalObject("../assets/panda.idle/", 1, (200, 200), Vector2([250, 280]))
+    mPlayer = Player("../assets/panda/idle/", 3.5, (100, 100), 100, .7, Vector2([250, 0]))
+    testObj = EnvironmentalObject("../assets/panda/idle/", 1, (200, 200), Vector2([250, 580]))
 
+    mLevelScreen = LevelScreen([testObj], (1920, 1080), "../assets/background/screen1/", 10)
 
     while True:
 
@@ -55,10 +57,8 @@ def __main__():
 
         screen.fill((0, 0, 0))
 
-        mPlayer.tick(1/fps, [testObj], screen)  # TODO: Replace [] with env objs
-
-        for obj in [testObj]:
-            obj.tick(1/fps, screen)
+        mLevelScreen.tick(1/fps, screen, mPlayer.physicsManager.pos)
+        mPlayer.tick(1/fps, mLevelScreen.getObjs() , screen)
 
         pygame.display.flip()
         fpsClock.tick(fps)  # Cap at 60 FPS
