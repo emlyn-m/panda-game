@@ -5,7 +5,7 @@ import platform
 from GraphicsManager import GraphicsManager
 from MovablePhysicsManager import MovablePhysicsManager
 from Vector2 import Vector2
-from ScoreRecord import Scores, ScoreRecord
+from ScoreRecord import Scores
 
 class Player():
 

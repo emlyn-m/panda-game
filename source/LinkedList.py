@@ -16,7 +16,7 @@ class Node():
     def setdata(self,datac):
         self.__data = datac
 
-class Linkedlist():
+class LinkedList():
 
     def __init__(self):
         self.__nodes = [Node("",0) for i in range(10)]
